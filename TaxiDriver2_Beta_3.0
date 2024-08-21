@@ -1,0 +1,372 @@
+import random
+
+# Global variables
+difficulty = "Medium"  # Default difficulty
+mission_1_completed = False
+mission_2_completed = False
+mission_3_completed = False
+mission_4_completed = False
+mission_5_completed = False
+mission_6_completed = False
+mission_7_completed = False
+mission_8_completed = False
+mission_9_completed = False
+side_mission_blackmail_completed = False
+side_mission_vigilante_completed = False
+side_mission_lost_soul_completed = False
+side_mission_corrupt_cop_completed = False
+side_mission_missing_girl_completed = False
+
+# Main game flow function
+def start_game():
+    mission_sequence = [
+        mission_1, mission_2, mission_3, mission_4, mission_5, 
+        mission_6, mission_7, mission_8, mission_9
+    ]
+    
+    for mission in mission_sequence:
+        mission()
+    
+    if all_core_missions_completed():
+        start_side_missions()
+    else:
+        display_text("Complete all core missions to proceed", font, WHITE, 0)
+
+def start_side_missions():
+    side_mission_sequence = [
+        side_mission_blackmail, side_mission_vigilante, 
+        side_mission_lost_soul, side_mission_corrupt_cop, 
+        side_mission_missing_girl
+    ]
+    
+    for side_mission in side_mission_sequence:
+        side_mission()
+    
+    if all_side_missions_completed():
+        start_final_mission()
+    else:
+        display_text("Complete all side missions to unlock the final mission", font, WHITE, 0)
+
+def mission_1():
+    display_text("Mission 1: The Rescue", font, WHITE, 0)
+    success = rescue_iris()  # Assuming rescue_iris() is a function that determines if Travis saves Iris
+    
+    if not success:
+        mission_1_game_over()
+    else:
+        display_text("Mission 1 Completed Successfully", font, GREEN, 0)
+        global mission_1_completed
+        mission_1_completed = True
+
+def mission_1_game_over():
+    display_text("Game Over", font, RED, 0)
+    display_text("Local Cabbie, Travis Bickle, found dead at 26 from shootout with pimps", font, WHITE, 0)
+    display_text("You talkin' to me? You talkin' to me? Well, I'm the only one here.", font, WHITE, 0)
+    display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    # Additional code for game over logic (restart mission, return to main menu, etc.)
+
+def mission_2():
+    display_text("Mission 2: The Chase", font, WHITE, 0)
+    success = chase_kidnappers()  # Assuming chase_kidnappers() handles the chase and its outcome
+    
+    if not success:
+        display_text("Mission Failed", font, RED, 0)
+        display_text("You can't stop them, no matter how hard you try.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Mission 2 Completed Successfully", font, GREEN, 0)
+        global mission_2_completed
+        mission_2_completed = True
+
+def mission_3():
+    display_text("Mission 3: The Investigation", font, WHITE, 0)
+    success = investigate_office()  # Assuming investigate_office() handles the investigation logic
+    
+    if not success:
+        display_text("Mission Failed", font, RED, 0)
+        display_text("You’re not getting any closer to the truth.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Mission 3 Completed Successfully", font, GREEN, 0)
+        global mission_3_completed
+        mission_3_completed = True
+
+def mission_4():
+    display_text("Mission 4: The Junkyard", font, WHITE, 0)
+    success = confront_junkyard_boss()  # Assuming confront_junkyard_boss() handles the junkyard logic
+    
+    if not success:
+        display_text("Mission Failed", font, RED, 0)
+        display_text("The junkyard remains under control of the wrong hands.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Mission 4 Completed Successfully", font, GREEN, 0)
+        global mission_4_completed
+        mission_4_completed = True
+
+def mission_5():
+    display_text("Mission 5: The Nightclub Shootout", font, WHITE, 0)
+    success = nightclub_shootout()  # Assuming nightclub_shootout() handles the nightclub logic
+    
+    if not success:
+        display_text("Mission Failed", font, RED, 0)
+        display_text("The chaos in the nightclub was too much to handle.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Mission 5 Completed Successfully", font, GREEN, 0)
+        global mission_5_completed
+        mission_5_completed = True
+
+def mission_6():
+    display_text("Mission 6: The Adult Theater", font, WHITE, 0)
+    success = escape_warhouse()  # Assuming escape_warhouse() handles the theater and warehouse logic
+    
+    if not success:
+        display_text("Mission Failed", font, RED, 0)
+        display_text("You were too late. Easy Andy was already gone.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Mission 6 Completed Successfully", font, GREEN, 0)
+        global mission_6_completed
+        mission_6_completed = True
+
+def mission_7():
+    display_text("Mission 7: The Pawn Shop", font, WHITE, 0)
+    success = confront_pawn_shop_owner()  # Assuming confront_pawn_shop_owner() handles the pawn shop logic
+    
+    if not success:
+        display_text("Mission Failed", font, RED, 0)
+        display_text("The pawn shop's owner has left with vital information.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Mission 7 Completed Successfully", font, GREEN, 0)
+        global mission_7_completed
+        mission_7_completed = True
+
+def mission_8():
+    display_text("Mission 8: The Brothel Rescue", font, WHITE, 0)
+    success = rescue_constance()  # Assuming rescue_constance() handles the brothel logic
+    
+    if not success:
+        display_text("Mission Failed", font, RED, 0)
+        display_text("Constance remains under threat. You were unable to save her.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Mission 8 Completed Successfully", font, GREEN, 0)
+        global mission_8_completed
+        mission_8_completed = True
+
+def mission_9():
+    display_text("Mission 9: The Cemetery Shootout", font, WHITE, 0)
+    success = cemetery_shootout()  # Assuming cemetery_shootout() handles the cemetery logic
+    
+    if not success:
+        display_text("Mission Failed", font, RED, 0)
+        display_text("The cemetery shootout ended in tragedy.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Mission 9 Completed Successfully", font, GREEN, 0)
+        global mission_9_completed
+        mission_9_completed = True
+
+# Side missions
+def side_mission_blackmail():
+    display_text("Side Mission: The Blackmail", font, WHITE, 0)
+    success = blackmail_organizer()  # Placeholder for blackmail mission logic
+    
+    if not success:
+        display_text("Side Mission Failed", font, RED, 0)
+        display_text("The blackmail attempt did not go as planned.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Side Mission Completed Successfully", font, GREEN, 0)
+        global side_mission_blackmail_completed
+        side_mission_blackmail_completed = True
+
+def side_mission_vigilante():
+    display_text("Side Mission: The Vigilante", font, WHITE, 0)
+    success = stop_criminals()  # Placeholder for vigilante mission logic
+    
+    if not success:
+        display_text("Side Mission Failed", font, RED, 0)
+        display_text("The vigilante mission ended in failure.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Side Mission Completed Successfully", font, GREEN, 0)
+        global side_mission_vigilante_completed
+        side_mission_vigilante_completed = True
+
+def side_mission_lost_soul():
+    display_text("Side Mission: The Lost Soul", font, WHITE, 0)
+    success = help_lost_soul()  # Placeholder for helping lost soul logic
+    
+    if not success:
+        display_text("Side Mission Failed", font, RED, 0)
+        display_text("The lost soul was not helped in time.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Side Mission Completed Successfully", font, GREEN, 0)
+        global side_mission_lost_soul_completed
+        side_mission_lost_soul_completed = True
+
+def side_mission_corrupt_cop():
+    display_text("Side Mission: The Corrupt Cop", font, WHITE, 0)
+    success = expose_corrupt_cop()  # Placeholder for exposing corrupt cop logic
+    
+    if not success:
+        display_text("Side Mission Failed", font, RED, 0)
+        display_text("The corrupt cop managed to escape justice.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Side Mission Completed Successfully", font, GREEN, 0)
+        global side_mission_corrupt_cop_completed
+        side_mission_corrupt_cop_completed = True
+
+def side_mission_missing_girl():
+    display_text("Side Mission: The Missing Girl", font, WHITE, 0)
+    success = find_missing_girl()  # Placeholder for finding missing girl logic
+    
+    if not success:
+        display_text("Side Mission Failed", font, RED, 0)
+        display_text("The missing girl was not found.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Side Mission Completed Successfully", font, GREEN, 0)
+        global side_mission_missing_girl_completed
+        side_mission_missing_girl_completed = True
+
+# Function to check if all core missions are completed
+def all_core_missions_completed():
+    return (mission_1_completed and mission_2_completed and 
+            mission_3_completed and mission_4_completed and 
+            mission_5_completed and mission_6_completed and 
+            mission_7_completed and mission_8_completed and 
+            mission_9_completed)
+
+# Function to check if all side missions are completed
+def all_side_missions_completed():
+    return (side_mission_blackmail_completed and 
+            side_mission_vigilante_completed and 
+            side_mission_lost_soul_completed and 
+            side_mission_corrupt_cop_completed and 
+            side_mission_missing_girl_completed)
+
+# Function to start the final mission
+def start_final_mission():
+    display_text("Final Mission: The Showdown", font, WHITE, 0)
+    success = showdown()  # Assuming showdown() handles the final mission logic
+    
+    if not success:
+        display_text("Final Mission Failed", font, RED, 0)
+        display_text("The final showdown ended in disaster.", font, WHITE, 0)
+        display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+    else:
+        display_text("Final Mission Completed Successfully", font, GREEN, 0)
+        ask_for_ending()
+
+# Function to ask for the ending choice
+def ask_for_ending():
+    print("What resolution would you like to see for Travis?")
+    print("1. Back on the road with the scum gone")
+    print("2. Giving into the demons")
+    
+    choice = input("Enter your choice: ")
+    
+    if choice == "1":
+        good_secret_ending()
+    elif choice == "2":
+        bad_secret_ending()
+    else:
+        print("Invalid choice. Defaulting to good ending.")
+        good_secret_ending()
+
+# Function for the good secret ending
+def good_secret_ending():
+    display_text("Secret Ending: Back on the Road", font, WHITE, 0)
+    display_text("Travis resumes his life as a taxi driver. The city looks shiny and happy.", font, GREEN, 0)
+    display_text("Travis: I’m just trying to find a way to make sense of all this.", font, WHITE, 0)
+    display_text("You talkin' to me? You talkin' to me? Well, I'm the only one here.", font, WHITE, 0)
+    display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+
+# Function for the bad secret ending
+def bad_secret_ending():
+    display_text("Secret Ending: Giving into the Demons", font, WHITE, 0)
+    display_text("Travis succumbs to his demons and ends his life.", font, RED, 0)
+    display_text("Travis: I’ve got to do something. I’ve got to end this.", font, WHITE, 0)
+    display_text("You talkin' to me? You talkin' to me? Well, I'm the only one here.", font, WHITE, 0)
+    display_text("Loneliness has followed me my whole life. Everywhere. In bars, in cars, sidewalks, stores, everywhere. There's no escape. I'm God's lonely man.", font, WHITE, 0)
+
+# Function to adjust for difficulty
+def adjust_for_difficulty():
+    global difficulty
+    if difficulty == "Easy":
+        # Set game parameters for Easy difficulty
+        pass
+    elif difficulty == "Medium":
+        # Set game parameters for Medium difficulty
+        pass
+    elif difficulty == "Hard":
+        # Set game parameters for Hard difficulty
+        pass
+
+# Function to display text (placeholder for actual game rendering)
+def display_text(text, font, color, position):
+    print(text)  # This should be replaced with actual game rendering logic
+
+# Main menu function
+def main_menu():
+    while True:
+        print("Welcome to Taxi Driver 2")
+        print("1. Start Game")
+        print("2. Adjust Difficulty")
+        print("3. Quit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            start_game_with_difficulty()
+        elif choice == "2":
+            difficulty = adjust_difficulty()
+        elif choice == "3":
+            quit_game()
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
+# Function to adjust difficulty
+def adjust_difficulty():
+    print("Select difficulty level:")
+    print("1. Easy")
+    print("2. Medium")
+    print("3. Hard")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        return "Easy"
+    elif choice == "2":
+        return "Medium"
+    elif choice == "3":
+        return "Hard"
+    else:
+        print("Invalid choice. Defaulting to Medium.")
+        return "Medium"
+
+# Function to quit the game
+def quit_game():
+    print("Thanks for playing Taxi Driver 2!")
+    print("Credits:")
+    print("Director: Martin Scorsese")
+    print("Screenplay: Paul Schrader")
+    print("Starring: Robert De Niro, Jodie Foster, Cybill Shepherd")
+    print("Music: Bernard Herrmann")
+    print("Special thanks to all the fans and contributors.")
+    print("Disclaimer: This is a fan project and is in no way connected to the original movie.")
+    exit()
+
+# Function to start the game with selected difficulty
+def start_game_with_difficulty():
+    adjust_for_difficulty()
+    start_game()
+
+# Run the main menu
+main_menu()
