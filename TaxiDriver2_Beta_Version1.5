@@ -1,0 +1,86 @@
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Constants
+WIDTH, HEIGHT = 800, 600
+FPS = 60
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+PLAYER_SPEED = 5
+BULLET_SPEED = 10
+ENEMY_SPEED = 2
+LIVES = 3
+MISSION_COMPLETE_QUOTES = [
+    "I’m the only one here.",
+    "I’m standing here. I’m standing here."
+]
+GAME_OVER_QUOTE = "Someday a real rain will come and wash all this scum off the streets."
+MISSION_DESCRIPTIONS = [
+    "Mission 1: The Rescue",
+    "Mission 2: The Chase",
+    "Mission 3: The Investigation",
+    "Mission 4: The Junkyard",
+    "Mission 5: The Nightclub Shootout",
+    "Mission 6: The Adult Theater",
+    "Mission 7: The Pawn Shop",
+    "Mission 8: The Brothel Rescue",
+    "Mission 9: The Cemetery Shootout",
+    "Final Mission: The Showdown"
+]
+
+# Screen setup
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Taxi Driver 2")
+
+# Load assets
+player_image = pygame.Surface((50, 50))
+player_image.fill(RED)
+enemy_image = pygame.Surface((50, 50))
+enemy_image.fill(BLACK)
+bullet_image = pygame.Surface((10, 5))
+bullet_image.fill(RED)
+taxi_image = pygame.Surface((100, 50))
+taxi_image.fill(WHITE)
+
+# Font
+font = pygame.font.Font(None, 74)
+small_font = pygame.font.Font(None, 36)
+
+# Game variables
+player_rect = pygame.Rect(WIDTH // 2, HEIGHT - 60, 50, 50)
+enemies = [pygame.Rect(100, HEIGHT - 100, 50, 50)]
+bullets = []
+lives = LIVES
+game_over = False
+mission_complete = False
+secret_mission = False
+happy_ending = False
+current_mission = 0
+mission_complete_counter = 0
+
+def display_text(text, font, color, y_offset=0):
+    rendered_text = font.render(text, True, color)
+    screen.blit(rendered_text, (WIDTH // 2 - rendered_text.get_width() // 2, HEIGHT // 2 - rendered_text.get_height() // 2 + y_offset))
+
+def mission_screen(description):
+    screen.fill(BLACK)
+    display_text("Mission Start", font, WHITE, -50)
+    display_text(description, small_font, WHITE, 50)
+    pygame.display.flip()
+    pygame.time.wait(2000)  # Wait 2 seconds
+
+def game_over_screen():
+    screen.fill(BLACK)
+    display_text("Game Over", font, WHITE, -50)
+    display_text(GAME_OVER_QUOTE, small_font, WHITE, 50)
+    pygame.display.flip()
+    pygame.time.wait(5000)  # Wait 5 seconds before exiting or restarting
+
+def mission_complete_screen():
+    global mission_complete_counter
+    screen.fill(BLACK)
+    display_text("Mission Compl
