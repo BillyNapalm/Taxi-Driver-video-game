@@ -1,0 +1,236 @@
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Constants
+WIDTH, HEIGHT = 800, 600
+FPS = 60
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+PLAYER_SPEED = 5
+BULLET_SPEED = 10
+ENEMY_SPEED = 2
+LIVES = 3
+MISSION_COMPLETE_QUOTES = [
+    "I’m the only one here.",
+    "I’m standing here. I’m standing here."
+]
+GAME_OVER_QUOTE = "Someday a real rain will come and wash all this scum off the streets."
+MISSION_DESCRIPTIONS = [
+    "Mission 1: The Rescue",
+    "Mission 2: The Chase",
+    "Mission 3: The Investigation",
+    "Mission 4: The Junkyard",
+    "Mission 5: The Nightclub Shootout",
+    "Mission 6: The Adult Theater",
+    "Mission 7: The Pawn Shop",
+    "Mission 8: The Brothel Rescue",
+    "Mission 9: The Cemetery Shootout",
+    "Final Mission: The Showdown"
+]
+
+# Screen setup
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Taxi Driver 2")
+
+# Load assets
+player_image = pygame.Surface((50, 50))
+player_image.fill(RED)
+enemy_image = pygame.Surface((50, 50))
+enemy_image.fill(BLACK)
+bullet_image = pygame.Surface((10, 5))
+bullet_image.fill(RED)
+taxi_image = pygame.Surface((100, 50))
+taxi_image.fill(WHITE)
+
+# Font
+font = pygame.font.Font(None, 74)
+small_font = pygame.font.Font(None, 36)
+
+# Game variables
+player_rect = pygame.Rect(WIDTH // 2, HEIGHT - 60, 50, 50)
+enemies = [pygame.Rect(100, HEIGHT - 100, 50, 50)]
+bullets = []
+lives = LIVES
+game_over = False
+mission_complete = False
+secret_mission = False
+happy_ending = False
+current_mission = 0
+mission_complete_counter = 0
+choice_made = False
+
+def display_text(text, font, color, y_offset=0):
+    rendered_text = font.render(text, True, color)
+    screen.blit(rendered_text, (WIDTH // 2 - rendered_text.get_width() // 2, HEIGHT // 2 - rendered_text.get_height() // 2 + y_offset))
+
+def mission_screen(description):
+    screen.fill(BLACK)
+    display_text("Mission Start", font, WHITE, -50)
+    display_text(description, small_font, WHITE, 50)
+    pygame.display.flip()
+    pygame.time.wait(2000)  # Wait 2 seconds
+
+def game_over_screen():
+    screen.fill(BLACK)
+    display_text("Game Over", font, WHITE, -50)
+    display_text(GAME_OVER_QUOTE, small_font, WHITE, 50)
+    pygame.display.flip()
+    pygame.time.wait(5000)  # Wait 5 seconds before exiting or restarting
+
+def mission_complete_screen():
+    global mission_complete_counter
+    screen.fill(BLACK)
+    display_text("Mission Complete", font, WHITE, -50)
+    quote = MISSION_COMPLETE_QUOTES[mission_complete_counter % len(MISSION_COMPLETE_QUOTES)]
+    display_text(quote, small_font, WHITE, 50)
+    pygame.display.flip()
+    mission_complete_counter += 1
+    pygame.time.wait(2000)  # Wait 2 seconds before proceeding
+
+def secret_mission_screen():
+    screen.fill(BLACK)
+    display_text("Secret Mission: The Final Act", font, WHITE, -50)
+    display_text("Travis Bickle confronts his demons.", small_font, WHITE, 50)
+    pygame.display.flip()
+    pygame.time.wait(2000)  # Wait 2 seconds
+    # Display Travis's inner monologue for the bad ending
+    screen.fill(BLACK)
+    display_text("Travis's Final Moments", font, WHITE, -50)
+    display_text("The voices in my head are getting louder, relentless...", small_font, WHITE, 50)
+    pygame.display.flip()
+    pygame.time.wait(5000)  # Wait 5 seconds before ending the game
+
+def happy_ending_screen():
+    screen.fill(WHITE)
+    display_text("Secret Ending: A New Beginning", font, BLACK, -50)
+    display_text("Travis resumes his taxi driving in a brighter world.", small_font, BLACK, 50)
+    pygame.draw.rect(screen, BLACK, (WIDTH // 2 - 50, HEIGHT // 2 - 25, 100, 50))  # Draw taxi
+    pygame.display.flip()
+    pygame.time.wait(5000)  # Wait 5 seconds
+    # Display Travis's inner monologue for the good ending
+    screen.fill(WHITE)
+    display_text("Travis's Reflection", font, BLACK, -50)
+    display_text("The city's lights seem to shine a little brighter tonight...", small_font, BLACK, 50)
+    pygame.display.flip()
+    pygame.time.wait(5000)  # Wait 5 seconds before ending the game
+
+def final_moments():
+    screen.fill(BLACK)
+    display_text("Travis's Final Moments", font, WHITE, -50)
+    display_text("In his darkest hour, Travis meets his end.", small_font, WHITE, 50)
+    pygame.display.flip()
+    pygame.time.wait(5000)  # Wait 5 seconds before ending the game
+
+def choice_screen():
+    global choice_made
+    screen.fill(BLACK)
+    display_text("Choose Travis's Resolution", font, WHITE, -50)
+    display_text("1. Back on the road with the scum gone", small_font, WHITE, -10)
+    display_text("2. Giving into the demons", small_font, WHITE, 30)
+    pygame.display.flip()
+
+    # Wait for player input
+    while not choice_made:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    happy_ending = True
+                    choice_made = True
+                elif event.key == pygame.K_2:
+                    secret_mission = True
+                    choice_made = True
+
+def reset_for_next_mission():
+    global player_rect, enemies, bullets, mission_complete, lives
+    player_rect.topleft = (WIDTH // 2, HEIGHT - 60)
+    enemies = [pygame.Rect(100, HEIGHT - 100, 50, 50)]  # Example reset, customize as needed
+    bullets = []
+    mission_complete = False
+
+# Game loop
+clock = pygame.time.Clock()
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not game_over and not mission_complete and not secret_mission and not happy_ending and not choice_made:
+                bullets.append(pygame.Rect(player_rect.centerx, player_rect.top, 10, 5))
+    
+    if not game_over and not mission_complete and not secret_mission and not happy_ending and not choice_made:
+        # Movement
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            player_rect.x -= PLAYER_SPEED
+        if keys[pygame.K_RIGHT]:
+            player_rect.x += PLAYER_SPEED
+        
+        # Update bullets
+        for bullet in bullets[:]:
+            bullet.y -= BULLET_SPEED
+            if bullet.y < 0:
+                bullets.remove(bullet)
+            for enemy in enemies[:]:
+                if bullet.colliderect(enemy):
+                    enemies.remove(enemy)
+                    bullets.remove(bullet)
+                    mission_complete = True  # Trigger mission complete when an enemy is hit
+        
+        # Update enemies
+        for enemy in enemies:
+            enemy.x += ENEMY_SPEED
+            if enemy.right > WIDTH or enemy.left < 0:
+                ENEMY_SPEED = -ENEMY_SPEED
+                enemy.y += 50
+        
+        # Check for collisions
+        for enemy in enemies[:]:
+            if player_rect.colliderect(enemy):
+                lives -= 1
+                if lives <= 0:
+                    game_over = True
+                else:
+                    reset_for_next_mission()
+        
+        # Draw everything
+        screen.fill(WHITE)
+        pygame.draw.rect(screen, RED, player_rect)
+        for enemy in enemies:
+            pygame.draw.rect(screen, BLACK, enemy)
+        for bullet in bullets:
+            pygame.draw.rect(screen, RED, bullet)
+        
+        pygame.display.flip()
+        clock.tick(FPS)
+    
+    elif game_over:
+        # Game Over Screen
+        game_over_screen()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+    
+    elif mission_complete:
+        # Mission Complete Screen
+        mission_complete_screen()
+        pygame.time.wait(2000)  # Wait 2 seconds
+        current_mission += 1
+        if current_mission >= len(MISSION_DESCRIPTIONS):
+            choice_screen()  # Show choice screen after the final mission
+        else:
+            mission_screen(MISSION_DESCRIPTIONS[current_mission])
+            reset_for_next_mission()
+    
+    elif secret_mission:
+        # Secret Mission: The Final Act
+        secret_mission_screen
